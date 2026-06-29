@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+
+{% block content %}
+
+<section class="page-header-section">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-custom">
+        <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+        <li class="breadcrumb-item active">About</li>
+      </ol>
+    </nav>
+    <h1 class="page-header-title">
+      <i class="fa-solid fa-circle-info me-3"></i>About This Project
+    </h1>
+    <p class="page-header-subtitle">
+      A full-stack AI web application integrating IBM watsonx.ai for binary loan classification.
+    </p>
+  </div>
+</section>
+
+<section class="section-padding">
+  <div class="container">
+
+    <!-- ======================================== PROJECT OVERVIEW -->
+    <div class="row g-4 mb-5">
+      <div class="col-lg-8">
+        <div class="about-card h-100">
+          <h4 class="about-card-title"><i class="fa-solid fa-rocket me-2 text-accent"></i>Project Overview</h4>
+          <p>
+            <strong>Loan Approval Prediction System</strong> is an end-to-end machine learning web application
+            that uses an IBM watsonx.ai AutoAI model to predict whether a loan application will be
+            <span class="text-success fw-600">Approved</span> or <span class="text-danger fw-600">Rejected</span>
+            based on 11 applicant features.
+          </p>
+          <p>
+            The model was trained on a real-world loan dataset and deployed as an Online Deployment on
+            IBM Cloud (eu-de region). A Flask backend handles IAM authentication, input validation,
+            and REST API communication — ensuring your credentials are never exposed to the browser.
+          </p>
+          <div class="tech-badges mt-3">
+            <span class="tech-badge"><i class="fa-brands fa-python me-1"></i>Python 3.12</span>
+            <span class="tech-badge"><i class="fa-solid fa-flask me-1"></i>Flask 3.0</span>
+            <span class="tech-badge"><i class="fa-solid fa-cloud me-1"></i>IBM Cloud</span>
+            <span class="tech-badge"><i class="fa-solid fa-robot me-1"></i>IBM AutoAI</span>
+            <span class="tech-badge"><i class="fa-brands fa-bootstrap me-1"></i>Bootstrap 5</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="about-card h-100">
+          <h4 class="about-card-title"><i class="fa-solid fa-table me-2 text-accent"></i>Dataset Info</h4>
+          <ul class="about-list">
+            <li><strong>Source:</strong> Loan Approval Prediction CSV</li>
+            <li><strong>Target:</strong> Loan_Status (Y / N)</li>
+            <li><strong>Type:</strong> Binary Classification</li>
+            <li><strong>Features:</strong> 11 input features</li>
+            <li><strong>Platform:</strong> IBM watsonx.ai AutoAI</li>
+            <li><strong>Region:</strong> eu-de (Frankfurt)</li>
+            <li><strong>Deployment:</strong> Online (REST API)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================== INPUT FEATURES -->
+    <div class="mb-5">
+      <h4 class="section-sub-title mb-4">
+        <i class="fa-solid fa-table-columns me-2 text-accent"></i>Model Input Features
+      </h4>
+      <div class="row g-3">
+        {% set features = [
+          ("Loan_ID",           "fa-id-badge",          "Auto-generated unique ID (LP + timestamp). Not entered by user."),
+          ("Gender",            "fa-venus-mars",         "Male / Female"),
+          ("Married",           "fa-ring",               "Yes / No"),
+          ("Dependents",        "fa-users",              "0 / 1 / 2 / 3+"),
+          ("Education",         "fa-graduation-cap",     "Graduate / Not Graduate"),
+          ("Self_Employed",     "fa-briefcase",          "Yes / No"),
+          ("ApplicantIncome",   "fa-dollar-sign",        "Monthly income of the primary applicant"),
+          ("CoapplicantIncome", "fa-dollar-sign",        "Monthly income of the co-applicant (0 if none)"),
+          ("LoanAmount",        "fa-sack-dollar",        "Requested loan amount in thousands"),
+          ("Loan_Amount_Term",  "fa-calendar-days",      "Repayment period in months (120 / 180 / 240 / 360)"),
+          ("Credit_History",    "fa-star",               "1 = Good credit history, 0 = Poor credit history"),
+          ("Property_Area",     "fa-map-location-dot",  "Urban / Semiurban / Rural"),
+        ] %}
+        {% for name, icon, desc in features %}
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-info-card">
+            <div class="fi-icon"><i class="fa-solid {{ icon }}"></i></div>
+            <div>
+              <div class="fi-name">{{ name }}</div>
+              <div class="fi-desc">{{ desc }}</div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- ======================================== IBM WATSONX + AUTOAI -->
+    <div class="row g-4 mb-5">
+      <div class="col-lg-6">
+        <div class="about-card h-100">
+          <h4 class="about-card-title"><i class="fa-solid fa-cloud me-2 text-accent"></i>IBM Cloud &amp; watsonx.ai</h4>
+          <p>
+            <strong>IBM Cloud</strong> is a full-stack cloud platform with over 170 products and services.
+            <strong>IBM watsonx.ai</strong> is the AI studio within IBM Cloud that provides tools to
+            train, validate, tune, and deploy AI models with full governance.
+          </p>
+          <p>
+            The deployment endpoint used by this app is hosted in the <strong>eu-de (Frankfurt)</strong> region:
+          </p>
+          <code class="endpoint-code">
+            eu-de.ml.cloud.ibm.com/ml/v4/deployments/&hellip;/predictions
+          </code>
+          <p class="mt-3">
+            Authentication uses IBM IAM (Identity and Access Management) — the Flask backend
+            exchanges your API key for a short-lived Bearer token automatically.
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="about-card h-100">
+          <h4 class="about-card-title"><i class="fa-solid fa-wand-magic-sparkles me-2 text-accent"></i>AutoAI Workflow</h4>
+          <ol class="about-ordered-list">
+            <li><strong>Data Ingestion</strong> — Upload the CSV dataset to IBM watsonx.ai project.</li>
+            <li><strong>AutoAI Experiment</strong> — Configure the target column (Loan_Status) and run.</li>
+            <li><strong>Pipeline Comparison</strong> — AutoAI tries multiple algorithms (Random Forest, XGBoost, etc.) and hyper-parameter combinations.</li>
+            <li><strong>Best Pipeline</strong> — The highest-ranked pipeline is saved as a model.</li>
+            <li><strong>Online Deployment</strong> — Model is deployed as a REST endpoint.</li>
+            <li><strong>API Call</strong> — This Flask app calls the endpoint with a JSON payload and receives <code>prediction</code> + <code>probability</code>.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================== API FLOW -->
+    <div class="mb-5">
+      <h4 class="section-sub-title mb-4">
+        <i class="fa-solid fa-diagram-project me-2 text-accent"></i>API Integration Flow
+      </h4>
+      <div class="api-timeline">
+        <div class="api-tl-step">
+          <div class="api-tl-dot"><i class="fa-solid fa-key"></i></div>
+          <div class="api-tl-content">
+            <strong>Step 1 — IAM Token</strong>
+            <p>Flask POSTs the <code>IBM_API_KEY</code> to <code>iam.cloud.ibm.com/identity/token</code> to obtain a Bearer token. Token is cached for ~1 hour.</p>
+          </div>
+        </div>
+        <div class="api-tl-step">
+          <div class="api-tl-dot"><i class="fa-solid fa-pen-to-square"></i></div>
+          <div class="api-tl-content">
+            <strong>Step 2 — Payload Build</strong>
+            <p>Form data is validated, numeric fields are cast, and Loan_ID is auto-generated. A structured JSON payload is assembled matching the model's expected schema.</p>
+          </div>
+        </div>
+        <div class="api-tl-step">
+          <div class="api-tl-dot"><i class="fa-solid fa-paper-plane"></i></div>
+          <div class="api-tl-content">
+            <strong>Step 3 — Scoring Request</strong>
+            <p>Flask POSTs the payload to the IBM watsonx.ai deployment endpoint with the Bearer token in the Authorization header.</p>
+          </div>
+        </div>
+        <div class="api-tl-step">
+          <div class="api-tl-dot"><i class="fa-solid fa-chart-bar"></i></div>
+          <div class="api-tl-content">
+            <strong>Step 4 — Parse &amp; Display</strong>
+            <p>The response <code>prediction</code> (Y/N) and <code>probability</code> array are parsed. The result is stored in the Flask session and rendered on the result page.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================== PROJECT STRUCTURE -->
+    <div class="mb-5">
+      <h4 class="section-sub-title mb-4">
+        <i class="fa-solid fa-folder-tree me-2 text-accent"></i>Project Structure
+      </h4>
+      <div class="code-block">
+<pre>loan-approval-webapp/
+├── app.py                  ← Flask entry point, all routes
+├── config.py               ← Environment configuration loader
+├── requirements.txt        ← Python dependencies
+├── .env.example            ← Template for environment variables
+├── README.md               ← Full project documentation
+│
+├── services/
+│   ├── auth.py             ← IBM IAM token management
+│   ├── predictor.py        ← IBM API payload + response parsing
+│   └── utils.py            ← Validation, sanitization, Loan_ID gen
+│
+├── templates/
+│   ├── base.html           ← Shared navbar, footer, Bootstrap
+│   ├── index.html          ← Home / landing page
+│   ├── predict.html        ← Loan prediction form
+│   ├── result.html         ← Prediction result display
+│   ├── about.html          ← Project &amp; tech explanation
+│   └── error.html          ← Friendly error page
+│
+└── static/
+    ├── css/style.css       ← Custom banking theme styles
+    └── js/main.js          ← Form validation &amp; animations</pre>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================= CTA -->
+<section class="section-padding cta-section">
+  <div class="container text-center">
+    <h2 class="section-title">Try the Live Prediction</h2>
+    <p class="section-subtitle">Experience IBM watsonx.ai AutoAI in action.</p>
+    <a href="{{ url_for('predict_view') }}" class="btn btn-cta mt-3">
+      <i class="fa-solid fa-bolt me-2"></i>Open Prediction Form
+    </a>
+  </div>
+</section>
+
+{% endblock %}

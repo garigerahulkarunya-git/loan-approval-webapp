@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+{% block title %}Loan Prediction Form{% endblock %}
+
+{% block content %}
+
+<section class="page-header-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb breadcrumb-custom">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item active">Predict</li>
+          </ol>
+        </nav>
+        <h1 class="page-header-title">
+          <i class="fa-solid fa-file-invoice-dollar me-3"></i>Loan Prediction Form
+        </h1>
+        <p class="page-header-subtitle">
+          Fill in your financial details below. All fields are required for an accurate prediction.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-padding">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-xl-9">
+
+        <!-- Validation Errors -->
+        {% if errors %}
+        <div class="alert alert-danger alert-custom mb-4" role="alert">
+          <div class="d-flex align-items-start gap-3">
+            <i class="fa-solid fa-circle-exclamation fs-5 mt-1"></i>
+            <div>
+              <strong>Please correct the following errors:</strong>
+              <ul class="mb-0 mt-1">
+                {% for error in errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="form-card">
+          <div class="form-card-header">
+            <div class="d-flex align-items-center gap-3">
+              <div class="form-header-icon">
+                <i class="fa-solid fa-brain"></i>
+              </div>
+              <div>
+                <h4 class="mb-0">Loan Application Details</h4>
+                <small class="text-muted">Powered by IBM watsonx.ai AutoAI</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-card-body">
+            <form id="loanForm" action="{{ url_for('predict_view') }}" method="POST" novalidate>
+
+              <!-- ======================================= PERSONAL INFORMATION -->
+              <div class="form-section">
+                <div class="form-section-title">
+                  <i class="fa-solid fa-user me-2"></i>Personal Information
+                </div>
+                <div class="row g-3">
+
+                  <div class="col-md-4">
+                    <label for="Gender" class="form-label required-label">Gender</label>
+                    <select class="form-select form-select-custom" id="Gender" name="Gender" required>
+                      <option value="" disabled {% if not form_data %}selected{% endif %}>Select Gender</option>
+                      <option value="Male"   {% if form_data and form_data.Gender == 'Male'   %}selected{% endif %}>Male</option>
+                      <option value="Female" {% if form_data and form_data.Gender == 'Female' %}selected{% endif %}>Female</option>
+                    </select>
+                    <div class="invalid-feedback">Please select your gender.</div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="Married" class="form-label required-label">Married</label>
+                    <select class="form-select form-select-custom" id="Married" name="Married" required>
+                      <option value="" disabled {% if not form_data %}selected{% endif %}>Select Status</option>
+                      <option value="Yes" {% if form_data and form_data.Married == 'Yes' %}selected{% endif %}>Yes</option>
+                      <option value="No"  {% if form_data and form_data.Married == 'No'  %}selected{% endif %}>No</option>
+                    </select>
+                    <div class="invalid-feedback">Please select your marital status.</div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="Dependents" class="form-label required-label">Dependents</label>
+                    <select class="form-select form-select-custom" id="Dependents" name="Dependents" required>
+                      <option value="" disabled {% if not form_data %}selected{% endif %}>Select Count</option>
+                      <option value="0"  {% if form_data and form_data.Dependents == '0'  %}selected{% endif %}>0</option>
+                      <option value="1"  {% if form_data and form_data.Dependents == '1'  %}selected{% endif %}>1</option>
+                      <option value="2"  {% if form_data and form_data.Dependents == '2'  %}selected{% endif %}>2</option>
+                      <option value="3+" {% if form_data and form_data.Dependents == '3+' %}selected{% endif %}>3+</option>
+                    </select>
+                    <div class="invalid-feedback">Please select number of dependents.</div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="Education" class="form-label required-label">Education</label>
+                    <select class="form-select form-select-custom" id="Education" name="Education" required>
+                      <option value="" disabled {% if not form_data %}selected{% endif %}>Select Education</option>
+                      <option value="Graduate"     {% if form_data and form_data.Education == 'Graduate'     %}selected{% endif %}>Graduate</option>
+                      <option value="Not Graduate" {% if form_data and form_data.Education == 'Not Graduate' %}selected{% endif %}>Not Graduate</option>
+                    </select>
+                    <div class="invalid-feedback">Please select your education level.</div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="Self_Employed" class="form-label required-label">Self Employed</label>
+                    <select class="form-select form-select-custom" id="Self_Employed" name="Self_Employed" required>
+                      <option value="" disabled {% if not form_data %}selected{% endif %}>Select Option</option>
+                      <option value="Yes" {% if form_data and form_data.Self_Employed == 'Yes' %}selected{% endif %}>Yes</option>
+                      <option value="No"  {% if form_data and form_data.Self_Employed == 'No'  %}selected{% endif %}>No</option>
+                    </select>
+                    <div class="invalid-feedback">Please indicate if you are self-employed.</div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- ======================================= FINANCIAL INFORMATION -->
+              <div class="form-section">
+                <div class="form-section-title">
+                  <i class="fa-solid fa-coins me-2"></i>Financial Information
+                </div>
+                <div class="row g-3">
+
+                  <div class="col-md-6">
+                    <label for="ApplicantIncome" class="form-label required-label">
+                      Applicant Income
+                      <span class="form-hint">Monthly income in USD/INR</span>
+                    </label>
+                    <div class="input-group input-group-custom">
+                      <span class="input-group-text"><i class="fa-solid fa-dollar-sign"></i></span>
+                      <input type="number" class="form-control" id="ApplicantIncome"
+                             name="ApplicantIncome" placeholder="e.g. 5000" min="1"
+                             value="{{ form_data.ApplicantIncome if form_data else '' }}" required />
+                    </div>
+                    <div class="invalid-feedback">Please enter a valid applicant income (> 0).</div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="CoapplicantIncome" class="form-label required-label">
+                      Coapplicant Income
+                      <span class="form-hint">Enter 0 if none</span>
+                    </label>
+                    <div class="input-group input-group-custom">
+                      <span class="input-group-text"><i class="fa-solid fa-dollar-sign"></i></span>
+                      <input type="number" class="form-control" id="CoapplicantIncome"
+                             name="CoapplicantIncome" placeholder="e.g. 0" min="0"
+                             value="{{ form_data.CoapplicantIncome if form_data else '' }}" required />
+                    </div>
+                    <div class="invalid-feedback">Please enter coapplicant income (0 or more).</div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="LoanAmount" class="form-label required-label">
+                      Loan Amount
+                      <span class="form-hint">In thousands</span>
+                    </label>
+                    <div class="input-group input-group-custom">
+                      <span class="input-group-text"><i class="fa-solid fa-sack-dollar"></i></span>
+                      <input type="number" class="form-control" id="LoanAmount"
+                             name="LoanAmount" placeholder="e.g. 128" min="1"
+                             value="{{ form_data.LoanAmount if form_data else '' }}" required />
+                      <span class="input-group-text">K</span>
+                    </div>
+                    <div class="invalid-feedback">Please enter the requested loan amount.</div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="Loan_Amount_Term" class="form-label required-label">Loan Amount Term</label>
+                    <div class="input-group input-group-custom">
+                      <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                      <select class="form-select" id="Loan_Amount_Term" name="Loan_Amount_Term" required>
+                        <option value="" disabled {% if not form_data %}selected{% endif %}>Select Term</option>
+                        <option value="120" {% if form_data and form_data.Loan_Amount_Term == '120' %}selected{% endif %}>120 months (10 yrs)</option>
+                        <option value="180" {% if form_data and form_data.Loan_Amount_Term == '180' %}selected{% endif %}>180 months (15 yrs)</option>
+                        <option value="240" {% if form_data and form_data.Loan_Amount_Term == '240' %}selected{% endif %}>240 months (20 yrs)</option>
+                        <option value="360" {% if form_data and form_data.Loan_Amount_Term == '360' %}selected{% endif %}>360 months (30 yrs)</option>
+                      </select>
+                    </div>
+                    <div class="invalid-feedback">Please select the loan term.</div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- ======================================= LOAN DETAILS -->
+              <div class="form-section">
+                <div class="form-section-title">
+                  <i class="fa-solid fa-landmark me-2"></i>Loan &amp; Property Details
+                </div>
+                <div class="row g-3">
+
+                  <div class="col-md-6">
+                    <label for="Credit_History" class="form-label required-label">Credit History</label>
+                    <select class="form-select form-select-custom" id="Credit_History" name="Credit_History" required>
+                      <option value="" disabled {% if not form_data %}selected{% endif %}>Select Credit History</option>
+                      <option value="1" {% if form_data and form_data.Credit_History == '1' %}selected{% endif %}>
+                        1 — Good (meets guidelines)
+                      </option>
+                      <option value="0" {% if form_data and form_data.Credit_History == '0' %}selected{% endif %}>
+                        0 — Poor (does not meet guidelines)
+                      </option>
+                    </select>
+                    <div class="invalid-feedback">Please select your credit history status.</div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="Property_Area" class="form-label required-label">Property Area</label>
+                    <select class="form-select form-select-custom" id="Property_Area" name="Property_Area" required>
+                      <option value="" disabled {% if not form_data %}selected{% endif %}>Select Area</option>
+                      <option value="Urban"     {% if form_data and form_data.Property_Area == 'Urban'     %}selected{% endif %}>Urban</option>
+                      <option value="Semiurban" {% if form_data and form_data.Property_Area == 'Semiurban' %}selected{% endif %}>Semiurban</option>
+                      <option value="Rural"     {% if form_data and form_data.Property_Area == 'Rural'     %}selected{% endif %}>Rural</option>
+                    </select>
+                    <div class="invalid-feedback">Please select the property area.</div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- ======================================= ACTIONS -->
+              <div class="form-actions">
+                <button type="button" id="resetBtn" class="btn btn-outline-secondary btn-form-action">
+                  <i class="fa-solid fa-rotate-left me-2"></i>Reset Form
+                </button>
+                <button type="submit" id="submitBtn" class="btn btn-primary-custom btn-form-action">
+                  <span class="btn-text">
+                    <i class="fa-solid fa-bolt me-2"></i>Predict Loan Approval
+                  </span>
+                  <span class="btn-loading d-none">
+                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                    Analyzing with AI…
+                  </span>
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <!-- Info note -->
+        <div class="info-note mt-4">
+          <i class="fa-solid fa-circle-info me-2 text-accent"></i>
+          <span>
+            Your data is processed securely and is never stored.
+            Loan_ID is auto-generated per request.
+            This prediction is for educational purposes only.
+          </span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Activate custom JS form validation
+  document.addEventListener('DOMContentLoaded', () => initPredictForm());
+</script>
+{% endblock %}

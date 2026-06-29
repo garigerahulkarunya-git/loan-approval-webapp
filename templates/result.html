@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}Prediction Result{% endblock %}
+
+{% block content %}
+
+<section class="page-header-section">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-custom">
+        <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('predict_view') }}">Predict</a></li>
+        <li class="breadcrumb-item active">Result</li>
+      </ol>
+    </nav>
+    <h1 class="page-header-title">
+      <i class="fa-solid fa-chart-bar me-3"></i>Prediction Result
+    </h1>
+  </div>
+</section>
+
+<section class="section-padding">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-xl-8">
+
+        <!-- ========================== MAIN RESULT CARD -->
+        <div class="result-card result-card-{{ 'approved' if result.prediction == 'Y' else 'rejected' }} mb-4">
+          <div class="result-card-glow"></div>
+          <div class="result-icon-wrap">
+            {% if result.prediction == 'Y' %}
+              <div class="result-icon approved-icon-large">
+                <i class="fa-solid fa-circle-check"></i>
+              </div>
+            {% else %}
+              <div class="result-icon rejected-icon-large">
+                <i class="fa-solid fa-circle-xmark"></i>
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="result-label">
+            {% if result.prediction == 'Y' %}
+              <span class="result-label-text approved-text">Loan Approved</span>
+              <p class="result-label-sub">Congratulations! Based on your profile, the loan is likely to be approved.</p>
+            {% else %}
+              <span class="result-label-text rejected-text">Loan Rejected</span>
+              <p class="result-label-sub">Based on your profile, the loan application does not meet approval criteria.</p>
+            {% endif %}
+          </div>
+
+          <!-- Confidence meter -->
+          <div class="confidence-section">
+            <div class="confidence-label">
+              <span>AI Confidence Score</span>
+              <span class="confidence-value">{{ result.confidence }}%</span>
+            </div>
+            <div class="confidence-bar-wrap">
+              <div class="confidence-bar {{ 'approved' if result.prediction == 'Y' else 'rejected' }}"
+                   style="width: 0%"
+                   data-target="{{ result.confidence }}">
+              </div>
+            </div>
+          </div>
+
+          <div class="result-meta">
+            <div class="result-meta-item">
+              <i class="fa-solid fa-id-card me-2"></i>
+              <span class="result-meta-label">Loan ID:</span>
+              <span class="result-meta-value">{{ result.loan_id }}</span>
+            </div>
+            <div class="result-meta-item">
+              <i class="fa-solid fa-robot me-2"></i>
+              <span class="result-meta-label">Model:</span>
+              <span class="result-meta-value">IBM watsonx.ai AutoAI</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================== SUBMITTED DETAILS -->
+        <div class="details-card mb-4">
+          <div class="details-card-header">
+            <i class="fa-solid fa-list-check me-2"></i>Submitted Application Details
+          </div>
+          <div class="details-card-body">
+            <div class="row g-0">
+
+              <div class="col-md-6">
+                <div class="detail-group">
+                  <span class="detail-section-label">Personal</span>
+                  <div class="detail-row">
+                    <span class="detail-key"><i class="fa-solid fa-venus-mars me-2"></i>Gender</span>
+                    <span class="detail-val">{{ result.form_data.Gender }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-key"><i class="fa-solid fa-ring me-2"></i>Married</span>
+                    <span class="detail-val">{{ result.form_data.Married }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-key"><i class="fa-solid fa-users me-2"></i>Dependents</span>
+                    <span class="detail-val">{{ result.form_data.Dependents }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-key"><i class="fa-solid fa-graduation-cap me-2"></i>Education</span>
+                    <span class="detail-val">{{ result.form_data.Education }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-key"><i class="fa-solid fa-briefcase me-2"></i>Self Employed</span>
+                    <span class="detail-val">{{ result.form_data.Self_Employed }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="detail-group">
+                  <span class="detail-section-label">Financial</span>
+                  <div class="detail-row">
+                    <span class="detail-key"><i class="fa-solid fa-dollar-sign me-2"></i>Applicant Income</span>
+                    <span class="detail-val">{{ result.form_data.ApplicantIncome }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-key"><i class="fa-solid fa-dollar-sign me-2"></i>Coapplicant Income</span>
+                    <span class="detail-val">{{ result.form_data.CoapplicantIncome }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-key"><i class="fa-solid fa-sack-dollar me-2"></i>Loan Amount</span>
+                    <span class="detail-val">{{ result.form_data.LoanAmount }}K</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-key"><i class="fa-solid fa-calendar-days me-2"></i>Loan Term</span>
+                    <span class="detail-val">{{ result.form_data.Loan_Amount_Term }} months</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-key"><i class="fa-solid fa-star me-2"></i>Credit History</span>
+                    <span class="detail-val">
+                      {% if result.form_data.Credit_History == '1' %}
+                        <span class="badge bg-success">Good (1)</span>
+                      {% else %}
+                        <span class="badge bg-danger">Poor (0)</span>
+                      {% endif %}
+                    </span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-key"><i class="fa-solid fa-map-location-dot me-2"></i>Property Area</span>
+                    <span class="detail-val">{{ result.form_data.Property_Area }}</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================== ACTIONS -->
+        <div class="d-flex flex-wrap gap-3 justify-content-center">
+          <a href="{{ url_for('predict_view') }}" class="btn btn-primary-custom btn-lg">
+            <i class="fa-solid fa-rotate me-2"></i>Predict Again
+          </a>
+          <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-lg">
+            <i class="fa-solid fa-house me-2"></i>Back to Home
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => animateConfidenceBar());
+</script>
+{% endblock %}
