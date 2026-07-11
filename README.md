@@ -45,7 +45,7 @@
 
 ## 🎯 Overview
 
-The **Loan Approval Prediction System** is an end-to-end AI-powered web application that enables instant, data-driven loan eligibility decisions. A user fills in a 12-field banking-style form; the Flask backend validates the data, authenticates with IBM IAM, and calls an IBM watsonx.ai AutoAI model deployed on IBM Cloud (eu-de region). The model returns a **binary prediction** — **Approved (Y)** or **Rejected (N)** — along with a **confidence score**. The result is displayed on a polished banking-themed result page.
+The **Loan Approval Prediction System** is an end-to-end AI-powered web application that enables instant, data-driven loan eligibility decisions. A user fills in a 12-field banking-style form; the Flask backend validates the data, authenticates with IBM IAM, and calls an IBM watsonx.ai AutoAI model deployed on IBM Cloud (au-syd region). The model returns a **binary prediction** — **Approved (Y)** or **Rejected (N)** — along with a **confidence score**. The result is displayed on a polished banking-themed result page.
 
 > **Internship / Portfolio Project** — Built to demonstrate full-stack development, REST API integration, and IBM Cloud AI capabilities.
 
@@ -94,7 +94,7 @@ The **Loan Approval Prediction System** is an end-to-end AI-powered web applicat
 | Technology | Purpose |
 |-----------|---------|
 | IBM watsonx.ai | AutoAI experiment, model training, online deployment |
-| IBM Cloud (eu-de) | Hosting the deployed model endpoint |
+| IBM Cloud (au-syd) | Hosting the deployed model endpoint |
 | IBM IAM | Authentication (API key → Bearer token exchange) |
 
 ---
@@ -119,10 +119,10 @@ The **Loan Approval Prediction System** is an end-to-end AI-powered web applicat
                       │  HTTPS POST + Bearer Token
                       ▼
 ┌─────────────────────────────────────────────────────────┐
-│               IBM Cloud  (eu-de / Frankfurt)            │
+│               IBM Cloud  (au-syd / Sydney)              │
 │                                                         │
 │  IAM Endpoint   →  iam.cloud.ibm.com/identity/token    │
-│  Scoring URL    →  eu-de.ml.cloud.ibm.com/ml/v4/        │
+│  Scoring URL    →  au-syd.ml.cloud.ibm.com/ml/v4/       │
 │                    deployments/<id>/predictions         │
 │                                                         │
 │  Response: { prediction: "Y", probability: [0.21,0.79]}│
@@ -180,10 +180,10 @@ loan-approval-webapp/
 
 ### Deployment Endpoint
 ```
-POST https://eu-de.ml.cloud.ibm.com/ml/v4/deployments/
-     019f13f6-fcea-76eb-939d-d14f7df1da2e/predictions?version=2021-05-01
+POST https://au-syd.ml.cloud.ibm.com/ml/v4/deployments/
+     019f4f9b-afe0-7265-9d4d-5c8a4f0e790a/predictions?version=2021-05-01
 ```
-**Region:** `eu-de` — Frankfurt, Germany
+**Region:** `au-syd` — Sydney, Australia
 
 ### Request Payload
 ```json
@@ -285,7 +285,7 @@ Edit `.env` and fill in your values:
 
 ```dotenv
 IBM_API_KEY=<your-ibm-cloud-api-key>
-IBM_DEPLOYMENT_URL=https://eu-de.ml.cloud.ibm.com/ml/v4/deployments/<deployment-id>/predictions
+IBM_DEPLOYMENT_URL=https://au-syd.ml.cloud.ibm.com/ml/v4/deployments/<deployment-id>/predictions
 IBM_VERSION=2021-05-01
 SECRET_KEY=<generate-a-strong-random-string>
 ```

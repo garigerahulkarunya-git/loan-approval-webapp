@@ -21,8 +21,8 @@ class Config:
     IBM_API_KEY: str = os.environ.get("IBM_API_KEY", "")
     IBM_DEPLOYMENT_URL: str = os.environ.get(
         "IBM_DEPLOYMENT_URL",
-        "https://eu-de.ml.cloud.ibm.com/ml/v4/deployments/"
-        "019f13f6-fcea-76eb-939d-d14f7df1da2e/predictions",
+        "https://au-syd.ml.cloud.ibm.com/ml/v4/deployments/"
+        "019f4f9b-afe0-7265-9d4d-5c8a4f0e790a/predictions",
     )
     IBM_VERSION: str = os.environ.get("IBM_VERSION", "2021-05-01")
 
